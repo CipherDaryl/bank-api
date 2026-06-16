@@ -1,0 +1,45 @@
+<%- include('layout', { 
+  title: 'Créer un compte',
+  user: user,
+  message: message
+}) %>
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header bg-primary text-white">
+        <h4 class="mb-0"><i class="bi bi-plus-circle"></i> Nouveau compte</h4>
+      </div>
+      <div class="card-body">
+        <form action="/accounts/create" method="POST">
+          <div class="mb-3">
+            <label class="form-label">Type de compte *</label>
+            <select name="accountType" class="form-select" required>
+              <option value="">Sélectionnez...</option>
+              <option value="COURANT">Compte Courant</option>
+              <option value="EPARGNE">Compte Épargne</option>
+              <option value="PROFESSIONNEL">Compte Professionnel</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Dépôt initial (XAF)</label>
+            <input type="number" name="initialDeposit" class="form-control" value="0" min="0">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Devise</label>
+            <select name="currency" class="form-select">
+              <option value="XAF">XAF - Franc CFA</option>
+              <option value="EUR">EUR - Euro</option>
+              <option value="USD">USD - Dollar</option>
+            </select>
+          </div>
+          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <a href="/dashboard" class="btn btn-secondary">Annuler</a>
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-plus-circle"></i> Créer
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

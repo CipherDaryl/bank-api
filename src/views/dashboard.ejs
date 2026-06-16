@@ -1,0 +1,104 @@
+<%- include('layout', { title: 'Dashboard' }) %>
+
+<div class="row animate">
+    <div class="col-md-8">
+        <h2 style="font-weight:800; letter-spacing:-0.3px;">
+            <i class="bi bi-speedometer2" style="color: var(--accent);"></i> Dashboard
+        </h2>
+        <p style="color: var(--text-muted); margin-top: 4px; font-size: 0.875rem;">
+            Bienvenue, <strong style="color: var(--text-light);"><%= user.firstName %></strong>
+        </p>
+    </div>
+    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+        <a href="/accounts/create" class="btn btn-primary">
+            <i class="bi bi-plus-circle me-1"></i> Nouveau compte
+        </a>
+    </div>
+</div>
+
+<hr style="border-color: var(--border-color); margin: 24px 0;">
+
+<% if (accounts && accounts.length > 0) { %>
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-4">
+            <div class="stat-card animate animate-delay-1">
+                <div style="font-size: 0.68rem; font-weight:600; color: var(--text-muted); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:8px;">
+                    <i class="bi bi-wallet2 me-1" style="color:var(--accent);"></i> Comptes
+                </div>
+                <div class="stat-number"><%= accounts.length %></div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4">
+            <div class="stat-card animate animate-delay-2">
+                <div style="font-size: 0.68rem; font-weight:600; color: var(--text-muted); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:8px;">
+                    <i class="bi bi-check-circle me-1" style="color:var(--success);"></i> Actifs
+                </div>
+                <div class="stat-number"><%= accounts.filter(a => a.status === 'ACTIF').length %></div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4">
+            <div class="stat-card animate animate-delay-3">
+                <div style="font-size: 0.68rem; font-weight:600; color: var(--text-muted); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:8px;">
+                    <i class="bi bi-graph-up me-1" style="color:var(--primary);"></i> Solde total
+                </div>
+                <div class="stat-number" style="font-size:1.6rem;">
+                    <%= accounts.reduce((sum, a) => sum + Number(a.balance), 0).toLocaleString() %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <% accounts.forEach((account, index) => { %>
+            <div class="col-md-6 col-lg-4 animate" style="animation-delay: <%= (index + 1) * 0.08 %>s;">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <span class="badge <%= account.accountType === 'COURANT' ? 'badge-info' : account.accountType === 'EPARGNE' ? 'badge-success' : 'badge-warning' %>">
+                                <%= account.accountType %>
+                            </span>
+                            <span class="badge <%= account.status === 'ACTIF' ? 'badge-success' : 'badge-danger' %>">
+                                <%= account.status %>
+                            </span>
+                        </div>
+                        <p style="font-size:0.7rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">N° de compte</p>
+                        <code class="d-block mb-3"><%= account.accountNumber %></code>
+                        <h3 class="balance">
+                            <%= Number(account.balance).toLocaleString() %>
+                            <small><%= account.currency %></small>
+                        </h3>
+                        <hr style="border-color: var(--border-color); margin: 16px 0;">
+                        <div class="d-flex gap-2 flex-wrap">
+                            <a href="/deposit?accountId=<%= account.id %>" class="btn btn-success btn-sm flex-grow-1">
+                                <i class="bi bi-arrow-down-circle"></i> Dépôt
+                            </a>
+                            <a href="/withdraw?accountId=<%= account.id %>" class="btn btn-danger btn-sm flex-grow-1">
+                                <i class="bi bi-arrow-up-circle"></i> Retrait
+                            </a>
+                            <a href="/transfer?from=<%= account.id %>" class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-arrow-left-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+<% } else { %>
+    <div class="text-center py-5 animate">
+        <div class="card mx-auto" style="max-width:480px;">
+            <div class="card-body py-5">
+                <div class="hero-icon mb-4">
+                    <i class="bi bi-wallet2"></i>
+                </div>
+                <h3 style="font-weight:800; margin-bottom:10px;">Aucun compte ouvert</h3>
+                <p style="color: var(--text-muted); font-size:0.9rem; margin-bottom:24px;">
+                    Créez votre premier compte bancaire pour commencer.
+                </p>
+                <a href="/accounts/create" class="btn btn-primary">
+                    <i class="bi bi-plus-circle me-1"></i> Créer un compte
+                </a>
+            </div>
+        </div>
+    </div>
+<% } %>
