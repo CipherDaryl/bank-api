@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const API_URL = process.env.API_URL || 'http://localhost:3000/api/v1';
+const API_URL = 'https://bank-api-r3lj.onrender.com/api/v1';
 
 class WebController {
   // Accueil
