@@ -9,6 +9,8 @@ const accountRoutes = require('./routes/accountRoutes.js');
 const transactionRoutes = require('./routes/transactionRoutes.js');
 const webController = require('./controllers/webController.js');
 const sequelize = require('./config/database.js');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./config/swagger.js');
 
 const app = express();
 
@@ -37,6 +39,9 @@ const limiter = rateLimit({
   message: { status: 'error', message: 'Trop de requêtes' },
 });
 app.use('/api', limiter);
+
+// ============ DOCUMENTATION SWAGGER ============
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // ============ ROUTES API ============
 app.use('/api/v1/auth', authRoutes);
